@@ -29,11 +29,10 @@ $(function () {
     callback(playlist);
     return;
     $.ajax({
-      //url: 'api.php?method=getPlaylist',
-      url: 'test/playlist.json',
+      url: '/tracks',
       dataType: 'json',
       success: function (data){
-      console.log(data);
+        console.log(data);
         callback(data);
       }
     });

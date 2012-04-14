@@ -1,0 +1,3 @@
+mysql -uhackto -phackto hackto_test < db/schema.sql
+mysql -uhackto -phackto hackto_test < db/appdata.sql
+cd tests && php all_tests.php

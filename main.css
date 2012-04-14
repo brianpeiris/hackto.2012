@@ -1,0 +1,10 @@
+.result {
+  margin: 0.5em;
+  border: 1px solid black;
+}
+.result:hover {
+  background-color: lightyellow;
+}
+#player {
+  border: none;
+}

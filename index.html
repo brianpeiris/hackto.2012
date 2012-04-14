@@ -1,0 +1,36 @@
+<html>
+<head>
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="main.css" />
+
+<script src="js/underscore.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/soundcloud.js"></script>
+<script src="js/main.js"></script>
+
+<script id="resultTemplate" type="text/x-template">
+  <li class="result"> <%= title %> </li>
+</script>
+
+<script id="playlistItemTemplate" type="text/x-template">
+  <li class="playlistItem"> <%= id %> </li>
+</script>
+
+</head>
+<body>
+<h1>Listen Up!</h1>
+
+<iframe id="player" src="http://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/14708373&show_artwork=true&maxwidth=900"></iframe>
+
+<h2>Playlist</h2>
+<ol id="playlist"></ol>
+
+<h2>Search SoundCloud</h2>
+<input id="searchQuery" type="search" /><button id="search">search</button>
+<ol id="results"></ol>
+
+<h2>Suggestions by TrendSpottr</h2>
+<ol id="suggestions">loading...</ol>
+</body>
+</html>

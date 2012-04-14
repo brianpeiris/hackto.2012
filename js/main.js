@@ -1,8 +1,8 @@
 $(function () {
-  var playlist = [
-    {"id": 30212209},
-    {"id": 10760825},
-    {"id": 14708373}
+  var localPlaylist = [
+    {"url": 'http://api.soundcloud.com/tracks/30212209'},
+    {"url": 'http://api.soundcloud.com/tracks/10760825'},
+    {"url": 'http://api.soundcloud.com/tracks/14708373'}
   ];
 
   var playing = null;
@@ -26,41 +26,34 @@ $(function () {
   };
 
   var getPlaylist = function (callback) {
-    callback(playlist);
+    /*
+    callback(localPlaylist);
     return;
+    */
     $.ajax({
-      //url: 'api.php?method=getPlaylist',
-      url: 'test/playlist.json',
+      url: 'tracks',
+      //url: 'test/playlist.json',
       dataType: 'json',
       success: function (data){
-      console.log(data);
         callback(data);
       }
     });
   };
 
-  var addToPlaylist = function (id, callback) {
-    playlist.push({id: id});
+  var addToPlaylist = function (url, callback) {
+    /*
+    localPlaylist.push({url: url});
     callback();
     return;
+    */
     $.ajax({
-      //url: 'api.php?method=addToPlaylist',
+      url: 'tracks'
       method: 'post',
+      data: {
+        url: url
+      },
       success: function (data){
-        callback(data);
-      }
-    });
-  };
-
-  var popPlaylist = function (callback) {
-    playlist.shift();
-    callback();
-    return;
-    $.ajax({
-      url: 'api.php?method=popPlaylist',
-      method: 'post',
-      success: function (data){
-        callback(data);
+        callback();
       }
     });
   };
@@ -75,31 +68,53 @@ $(function () {
       },
       dataType: 'json',
       success: function (data){
-      console.log(data);
         callback(data);
       }
     });
   };
 
-  var playTrack = function (id) {
-    playing = id;
-    SC.Widget('player').load('http://api.soundcloud.com/tracks/' + id, {auto_play: true});
+  var getTrackDetails = function (url, callback) {
+    $.ajax({
+      url: url + '.json',
+      data: {
+        client_id: 'f176a2c149e9ba7cd8d36e56c3dccac1'
+      },
+      dataType: 'json',
+      success: function (data){
+        callback(data);
+      }
+    });
+  };
+
+  var playTrack = function (index) {
+    playing = index;
+    SC.Widget('player').load(
+      localPlaylist[index].url + '&client_id=f176a2c149e9ba7cd8d36e56c3dccac1',
+      {auto_play: true}
+    );
   };
 
   var displayPlaylist = function () {
     getPlaylist(function (playlist) {
+      localPlaylist = playlist
       if (playing === null) {
-        playTrack(playlist[0].id);
+        playTrack(0);
       }
-      var out = $($.map(playlist, function (item) {
-        var displayItem =  $(_.template($('#playlistItemTemplate').text(), item));
-        displayItem.data('id', item.id);
-        return displayItem[0];
-      }));
-      out.click(function () {
-        playTrack($(this).data('id'));
+      var out = $();
+      $.each(playlist, function (index, item) {
+        getTrackDetails(item.url, function (details) {
+          var displayItem = $(_.template($('#playlistItemTemplate').text(), details));
+          displayItem.data('index', index);
+          out = out.add(displayItem[0]);
+
+          if (index === playlist.length - 1) {
+            out.click(function () {
+              playTrack($(this).data('index'));
+            });
+            $('#playlist').empty().append(out);
+          }
+        });
       });
-      $('#playlist').empty().append(out);
     });
   };
 
@@ -110,11 +125,10 @@ $(function () {
       });
       var out = $($.map(links, function (item) {
         var displayItem =  $(_.template($('#resultTemplate').text(), item.expanded));
-        displayItem.data('html', item.expanded.html);
         return displayItem[0];
       }));
       out.click(function () {
-        addToPlaylist($(this).data('id'), function () {
+        addToPlaylist($(this).data('url'), function () {
           displayPlaylist();
         });
       });
@@ -126,11 +140,11 @@ $(function () {
     getSearchResults($('#searchQuery').val(), function (results) {
       var out = $($.map(results, function (item) {
         var displayItem =  $(_.template($('#resultTemplate').text(), item));
-        displayItem.data('id', item.id);
+        displayItem.data('url', item.uri);
         return displayItem[0];
       }));
       out.click(function () {
-        addToPlaylist($(this).data('id'), function () {
+        addToPlaylist($(this).data('url'), function () {
           displayPlaylist();
         });
       });
@@ -147,9 +161,8 @@ $(function () {
   });
 
   SC.Widget('player').bind(SC.Widget.Events.FINISH, function () {
-    playing = null;
-    popPlaylist(function () {
-      displayPlaylist();
-    });
+    displayPlaylist();
+    playing++;
+    playTrack(playing)
   });
 });

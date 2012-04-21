@@ -1,36 +1,118 @@
-<html>
 <head>
-<title></title>
 
-<link rel="stylesheet" type="text/css" href="/css/main.css" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-<script src="js/underscore.js"></script>
-<script src="js/jquery.js"></script>
-<script src="js/soundcloud.js"></script>
-<script src="js/main.js"></script>
+<title>Listen Up!</title>
+<meta name="description" content="Lets you create a SoundCloud playlist.">
+<meta name="author" content="Christian Leskowsky, Brian Peiris">
 
-<script id="resultTemplate" type="text/x-template">
-  <li class="result"> <%= title %> </li>
-</script>
+<link rel="favicon" href="img/favicon.ico">
 
-<script id="playlistItemTemplate" type="text/x-template">
-  <li class="playlistItem"> <%= title %> </li>
-</script>
+<meta name="viewport" content="width=device-width">
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<style>
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
+<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+<link rel="stylesheet" href="css/listenup.css">
+
+<script src="js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
 
 </head>
+
 <body>
-<h1>Listen Up!</h1>
 
-<iframe id="player" src="http://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/14708373&show_artwork=true&maxwidth=900"></iframe>
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 
-<h2>Playlist</h2>
-<ol id="playlist"></ol>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="/">Listen Up!</a>
+			<div class="nav-collapse">
+				<ul class="nav">
+					{{> nav }}
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div>
+</div>
 
-<h2>Search SoundCloud</h2>
-<input id="searchQuery" type="search" /><button id="search">search</button>
-<ol id="results"></ol>
+<div class="container">
 
-<h2>Suggestions by TrendSpottr</h2>
-<ol id="suggestions">loading...</ol>
+	<div id="home">
+		<div class="hero-unit">
+			<h1>Listen Up!</h1>
+			<p>Share SoundCloud playlists with your friends or play and edit them with a group of people.</p>
+			<p><a class="btn btn-primary btn-large" href="/playlist">Create a playlist &raquo;</a></p>
+		</div>
+
+		<!-- Example row of columns -->
+		<div class="row">
+			<div class="span4">
+				<h2>Create</h2>
+				 <p>Start a playlist by adding tracks that you already know, by searching SoundCloud or by choosing from a list of trending tracks (courtesy of TrendSpottr).</p>
+			</div>
+			<div class="span4">
+				<h2>Share</h2>
+				 <p>Send your playlist to your friends, co-workers so that they can add tracks of their own.</p>
+		 </div>
+			<div class="span4">
+				<h2>Listen</h2>
+				<p>A shared playlist can be played in realtime on multiple devices!</p>
+			</div>
+		</div>
+	</div><!-- /#home -->
+
+	<div id="playlist">
+	</div><!-- /#playlist -->
+
+	<div id="about">
+		<p>
+			Listen Up! was started at <a href="http://hackdays.ca/2012/04/hackto-boom/">the 2012 HackTO event</a> by <a href="http://leskowsky.net">Christian Leskowsky</a> and <a href="http://brian.peiris.name">Brian Peiris</a>
+		</p>
+	</div><!-- /#about -->
+
+	<hr>
+
+	<footer>
+		<p xmlns:dct="http://purl.org/dc/terms/">
+			<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+				<img src="http://i.creativecommons.org/p/mark/1.0/80x15.png" style="border-style: none;" alt="Public Domain Mark" />
+			</a>
+			<small>This work (<span property="dct:title">Listen Up!</span>, by <span rel="dct:creator"><span property="dct:title">Christian Leskowsky and Brian Peiris</span></span>) is free of known copyright restrictions.</small>
+		 </p>
+	</footer>
+
+</div> <!-- /container -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+
+<script src="js/libs/bootstrap/bootstrap.min.js"></script>
+
+<script>
+	var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+	(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+	g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+	s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
 </body>
-</html>
+
+<template name="nav">
+	{{#each navItem}}
+		<li><a href="/">Home</a></li>
+		<li><a href="/playlist">Playlist</a></li>
+		<li><a href="/about">About</a></li>
+	{{/each}}
+</template>

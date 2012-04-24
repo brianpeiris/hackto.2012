@@ -8,3 +8,11 @@
 #player {
   border: none;
 }
+
+.route {
+  display: none;
+}
+
+.route.visible-route {
+  display: block;
+}

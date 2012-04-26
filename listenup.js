@@ -165,32 +165,50 @@ SC.Widget('player').bind(SC.Widget.Events.FINISH, function () {
 
 };
 
+var Tracks = new Meteor.Collection("tracks");
+Tracks.remove({});
+Tracks.insert(
+  {name: "foo"}
+);
+
+if (Meteor.is_client) {
+  Template.playlist.track = function () {
+    return Tracks.find();
+  };
+  Template.track.events = {
+    'click': function () {
+      console.log(this, arguments);
+    }
+  };
+
+  Template.main.page_is = function (page) {
+    return Session.get("page") === page;
+  };
+}
+
 Meteor.startup(function () {
 
 if (Meteor.is_client) {
 
-// todo: Probably better to use a template and insert
-// views instead of hiding/showing them.
+// TODO: "home", "playlist" and "about" duplication is too damn high.
 var ListenUpRouter = Backbone.Router.extend({
   routes: {
-    '': 'home',
-    'home': 'home',
-    'playlist': 'playlist',
-    'playlist/:id': 'playlist',
-    'playlist/:id/:mode': 'playlist',
-    'about': 'about',
+    "": "home",
+    "home": "home",
+    "playlist": "playlist",
+    "playlist/:id": "playlist",
+    "playlist/:id/:mode": "playlist",
+    "about": "about",
   },
   home: function () {
-    $('#home').addClass('visible-route');
+    Session.set("page", "home");
   },
   playlist: function (id, mode) {
-    $('#playlistContainer').addClass('visible-route');
-    $('#playlistNav').addClass('active');
-    showPlaylist();
+    Session.set("page", "playlist");
   },
   about: function () {
-    $('#about').addClass('visible-route');
-  },
+    Session.set("page", "about");
+  }
 });
 
 new ListenUpRouter();

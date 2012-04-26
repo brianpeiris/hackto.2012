@@ -5,14 +5,23 @@
 .result:hover {
   background-color: lightyellow;
 }
+
 #player {
   border: none;
+  width: 100%;
+  height: 167px;
 }
 
-.route {
-  display: none;
+h2 { font-size: 22px; }
+
+@media (max-width: 480px) { }
+
+@media (max-width: 767px) { }
+
+@media (min-width: 768px) and (max-width: 979px) {
+  h2 { font-size: 16px; }
 }
 
-.route.visible-route {
-  display: block;
+@media (min-width: 1200px) {
+  h2 { font-size: 24px; }
 }

@@ -25,14 +25,6 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
-<script id="resultTemplate" type="text/x-template">
-  <li class="result"> <%= title %> </li>
-</script>
-
-<script id="playlistItemTemplate" type="text/x-template">
-  <li class="playlistItem"> <%= title %> </li>
-</script>
-
 <script src="js/libs/bootstrap.min.js"></script>
 <script src="js/libs/soundcloud.min.js"></script>
 
@@ -76,62 +68,9 @@
   </div>
 </div>
 
-<div class="container">
-
-  <div id="home" class="route">
-    <div class="hero-unit">
-      <h1>Listen Up!</h1>
-      <p>Share <a href="http://soundcloud.com/" target="_blank">SoundCloud</a> playlists with your friends or play and edit them
-      with a group of people.</p>
-      <p><a class="btn btn-primary btn-large" href="/playlist">Create a
-      playlist &raquo;</a></p>
-    </div>
-
-    <div class="row">
-      <div class="span4">
-        <h2>Create</h2>
-         <p>Start a playlist by adding tracks that you already know, by
-         searching SoundCloud or by choosing a trending track
-         courtesy of <a href="http://trendspottr.com" target="_blank">TrendSpottr</a>.</p>
-      </div>
-      <div class="span4">
-        <h2>Share</h2>
-         <p>Send your playlist to your friends, co-workers so that they can
-         add tracks of their own.</p>
-     </div>
-      <div class="span4">
-        <h2>Listen</h2>
-        <p>A shared playlist can be played in realtime on multiple devices!</p>
-      </div>
-    </div>
-  </div><!-- /#home -->
-
-  <div id="playlistContainer" class="route">
-    <iframe id="player"
-      src="http://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/14708373&show_artwork=true&maxwidth=900">
-    </iframe>
-
-    <h2>Playlist</h2>
-    <ol id="playlist"></ol>
-
-    <h2>Search SoundCloud</h2>
-    <input id="searchQuery" type="search" /><button id="search">search</button>
-    <ol id="results"></ol>
-
-    <h2>Suggestions by TrendSpottr</h2>
-    <ol id="suggestions">loading...</ol>
-  </div><!-- /#playlist -->
-
-  <div id="about" class="route">
-    <div class="hero-unit">
-      <p>
-        Listen Up! was started at
-        <a href="http://hackdays.ca/2012/04/hackto-boom/">the 2012 HackTO event
-        </a> by <a href="http://leskowsky.net">Christian Leskowsky</a> and
-        <a href="http://brian.peiris.name">Brian Peiris</a>
-      </p>
-    </div>
-  </div><!-- /#about -->
+<div class="container-fluid">
+  
+  {{> main}}
 
   <hr>
 
@@ -147,3 +86,94 @@
 </div> <!-- /container -->
 
 </body>
+
+<template name="main">
+  {{#if page_is "home"}}
+  <div id="home">
+    <div class="hero-unit">
+      <h1>Listen Up!</h1>
+      <p>Share <a href="http://soundcloud.com/" target="_blank">SoundCloud</a> playlists with your friends or play and edit them
+      with a group of people.</p>
+      <p><a class="btn btn-primary btn-large" href="/playlist">Create a
+      playlist &raquo;</a></p>
+    </div>
+
+    <div class="row-fluid">
+      <div class="span4">
+        <h2>Create</h2>
+         <p>Start a playlist by adding tracks that you already know, by
+         searching SoundCloud or by choosing a trending track
+         courtesy of <a href="http://trendspottr.com" target="_blank">TrendSpottr</a>.</p>
+      </div>
+      <div class="span4">
+        <h2>Share</h2>
+         <p>Send your playlist to your friends, co-workers so that they can
+         add tracks of their own. See your friends' changes as they happen!</p>
+     </div>
+      <div class="span4">
+        <h2>Listen</h2>
+        <p>A shared playlist can be played and synchronized across multiple devices!</p>
+      </div>
+    </div>
+  </div><!-- /#home -->
+  {{/if}}
+
+  {{#if page_is "playlist"}}
+  <div id="playlistViewContainer">
+    <div class="row-fluid">
+      <div class="span4">
+        <div id="playlistContainer">
+          <h2>Playlist</h2>
+          {{> playlist}}
+        </div>
+      </div>
+      <div class="span8">
+        <iframe id="player"
+          src="http://w.soundcloud.com/player/?show_artwork=true&maxwidth=900">
+        </iframe>
+        <div class="row-fluid">
+          <div class="span6">
+            <div id="searchContainer">
+              <h2>Search SoundCloud</h2>
+              <input id="searchQuery" type="search" />
+              <button class="btn" id="search">search</button>
+              <ol id="results"></ol>
+            </div>
+          </div>
+          <div class="span6">
+            <div id="suggestionsContainer">
+              <h2>Suggestions by TrendSpottr</h2>
+              <ol id="suggestions">loading...</ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /#playlist -->
+  {{/if}}
+
+  {{#if page_is "about"}}
+  <div id="about">
+    <div class="hero-unit">
+      <p>
+        Listen Up! was started at
+        <a href="http://hackdays.ca/2012/04/hackto-boom/">the 2012 HackTO event
+        </a> by <a href="http://leskowsky.net">Christian Leskowsky</a> and
+        <a href="http://brian.peiris.name">Brian Peiris</a>
+      </p>
+    </div>
+  </div><!-- /#about -->
+  {{/if}}
+</template>
+
+<template name="playlist">
+  <ol id="playlist">
+    {{#each track}}
+      {{> track}}
+    {{/each}}
+  </ol>
+</template>
+
+<template name="track">
+  <li class="track">{{name}}</li>
+</template>

@@ -165,18 +165,47 @@ SC.Widget('player').bind(SC.Widget.Events.FINISH, function () {
 
 };
 
+
+var Playlists = new Meteor.Collection("playlists");
+Playlists.remove({});
+
 var Tracks = new Meteor.Collection("tracks");
 Tracks.remove({});
-Tracks.insert(
-  {name: "foo"}
-);
+
+var groovyPlaylist = Playlists.insert({shortCode: "a1b2c3", title: "Groovy"});
+Tracks.insert({
+  playlistId: groovyPlaylist, title: "Subtle breeze", user: "princesalad",
+  soundCloudId: 5050500
+});
+Tracks.insert({
+  playlistId: groovyPlaylist, title: "Silver spoon", user: "princesalad",
+  soundCloudId: 2342344
+});
+
+var rapPlaylist = Playlists.insert({shortCode: "4d5e6f", title: "Rap"});
+Tracks.insert({
+  playlistId: rapPlaylist, title: "Mixed society", user: "feloniousbeats",
+  soundCloudId: 1123737
+});
+Tracks.insert({
+  playlistId: rapPlaylist, title: "Sharp projectiles", user: "feloniousbeats",
+  soundCloudId: 9945938
+});
 
 if (Meteor.is_client) {
+  Template.main.events = {
+    "click #search": function () {
+    }
+  };
+
   Template.playlist.track = function () {
-    return Tracks.find();
+    var playlist = Playlists.findOne(
+      {shortCode: Session.get("playlistShortCode")}
+    );
+    return Tracks.find({playlistId: playlist._id});
   };
   Template.track.events = {
-    'click': function () {
+    "click": function () {
       console.log(this, arguments);
     }
   };
@@ -205,6 +234,7 @@ var ListenUpRouter = Backbone.Router.extend({
   },
   playlist: function (id, mode) {
     Session.set("page", "playlist");
+    Session.set("playlistShortCode", id);
   },
   about: function () {
     Session.set("page", "about");
